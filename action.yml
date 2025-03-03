@@ -62,7 +62,7 @@ runs:
       shell: bash
       run: |
         set +e
-        cat results.json | jq
+        # cat results.json | jq
         curl --silent --show-error --fail --location \
           --request POST "https://${{ inputs.accuknox_endpoint }}/api/v1/artifact/?tenant_id=${{ inputs.accuknox_tenant }}&data_type=SG&label_id=${{ inputs.accuknox_label }}&save_to_s3=true" \
           --header "Tenant-Id: ${{ inputs.accuknox_tenant }}" \
