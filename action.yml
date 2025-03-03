@@ -1,5 +1,10 @@
 name: 'Accuknox Opengrep Scan'
 description: 'Perform OpenGrep scan on your repository and upload the results to Accuknox'
+author: "Accuknox"
+
+branding:  
+  icon: "activity"  
+  color: "blue"   
 
 inputs:
   REPOSITORY_URL:
