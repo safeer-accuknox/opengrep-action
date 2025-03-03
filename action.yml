@@ -7,37 +7,37 @@ branding:
   color: "blue"   
 
 inputs:
-  REPOSITORY_URL:
+  repository_url:
     description: 'Repository URL'
     required: false
-  COMMIT_SHA:
+  commit_sha:
     description: 'Commit SHA'
     required: false
-  COMMIT_REF:
+  commit_ref:
     description: 'Commit Reference'
     required: false
-  PIPELINE_ID:
+  pipeline_id:
     description: 'Github Run ID'
     required: true
     default: '${{ github.run_id }}'
-  JOB_URL:
+  job_url:
     description: 'Github Job URL'
     required: true
     default: '${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}'
-  ACCUKNOX_ENDPOINT:
+  accuknox_endpoint:
     description: 'The URL of the CSPM panel to push the scan results to'
     required: true
     default: 'cspm.dev.accuknox.com'
-  ACCUKNOX_TENANT:
+  accuknox_tenant:
     description: 'The ID of the tenant associated with the CSPM panel.'
     required: true
-  ACCUKNOX_TOKEN:
+  accuknox_token:
     description: 'The token for authenticating with the CSPM panel.'
     required: true
-  ACCUKNOX_LABEL:
+  accuknox_label:
     description: 'The label created in AccuKnox SaaS for associating scan results.'
     required: true
-  INPUT_SOFT_FAIL:
+  input_soft_fail:
     description: 'Do not return an error code if there are failed checks.'
     required: false
     default: 'false'
@@ -50,11 +50,11 @@ runs:
       run: |
         set +e
         docker run --rm -v "$PWD:/app" \
-          -e REPOSITORY_URL="${{ inputs.REPOSITORY_URL }}" \
-          -e COMMIT_SHA="${{ inputs.COMMIT_SHA }}" \
-          -e COMMIT_REF="${{ inputs.COMMIT_REF }}" \
-          -e PIPELINE_ID="${{ inputs.PIPELINE_ID }}" \
-          -e JOB_URL="${{ inputs.JOB_URL }}" \
+          -e REPOSITORY_URL="${{ inputs.repository_url }}" \
+          -e COMMIT_SHA="${{ inputs.commit_sha }}" \
+          -e COMMIT_REF="${{ inputs.commit_ref }}" \
+          -e PIPELINE_ID="${{ inputs.pipeline_id }}" \
+          -e JOB_URL="${{ inputs.job_url }}" \
           safeeraccuknox/demo:opengreptest-1.7
         echo "OPENGREP_EXIT_CODE=$?" >> $GITHUB_ENV
 
@@ -64,9 +64,9 @@ runs:
         set +e
         cat results.json | jq
         curl --silent --show-error --fail --location \
-          --request POST "https://${{ inputs.ACCUKNOX_ENDPOINT }}/api/v1/artifact/?tenant_id=${{ inputs.ACCUKNOX_TENANT }}&data_type=SG&label_id=${{ inputs.ACCUKNOX_LABEL }}&save_to_s3=true" \
-          --header "Tenant-Id: ${{ inputs.ACCUKNOX_TENANT }}" \
-          --header "Authorization: Bearer ${{ inputs.ACCUKNOX_TOKEN }}" \
+          --request POST "https://${{ inputs.accuknox_endpoint }}/api/v1/artifact/?tenant_id=${{ inputs.accuknox_tenant }}&data_type=SG&label_id=${{ inputs.accuknox_label }}&save_to_s3=true" \
+          --header "Tenant-Id: ${{ inputs.accuknox_tenant }}" \
+          --header "Authorization: Bearer ${{ inputs.accuknox_token }}" \
           --form 'file=@"results.json"'
         echo "AK_EXIT_CODE=$?" >> $GITHUB_ENV
 
@@ -85,7 +85,7 @@ runs:
         echo "FINAL_EXIT_CODE=$FINAL_EXIT_CODE"
 
         if [ "$FINAL_EXIT_CODE" -ne 0 ]; then
-          if [ "${{ inputs.INPUT_SOFT_FAIL }}" = "true" ]; then
+          if [ "${{ inputs.input_soft_fail }}" = "true" ]; then
             echo "Scan failed, but soft fail is enabled. Continuing..."
           else
             echo "Scan failed and soft fail is disabled. Exiting with failure."
