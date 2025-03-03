@@ -1,1 +1,1 @@
-# opengrep-action
+AccuKnox Opengrep GitHub Action
