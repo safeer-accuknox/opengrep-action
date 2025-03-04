@@ -77,7 +77,7 @@ runs:
       if: inputs.upload_artifact == 'true'
       uses: actions/upload-artifact@v4
       with:
-        name: scan-results-${{ inputs.commit_sha }}
+        name: scan-results-${{ github.sha }}
         path: results.json
         if-no-files-found: ignore
 
