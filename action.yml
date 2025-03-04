@@ -79,7 +79,9 @@ runs:
       with:
         name: scan-results
         path: results.json
-        if-no-files-found: ignore 
+        if-no-files-found: ignore
+        retention-days: 7
+        compression-level: 0
 
     - name: Fail pipeline if scan fails
       shell: bash
