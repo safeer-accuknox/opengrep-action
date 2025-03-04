@@ -27,7 +27,6 @@ inputs:
   accuknox_endpoint:
     description: 'The URL of the CSPM panel to push the scan results to'
     required: true
-    default: 'cspm.dev.accuknox.com'
   accuknox_tenant:
     description: 'The ID of the tenant associated with the CSPM panel.'
     required: true
@@ -39,11 +38,11 @@ inputs:
     required: true
   input_soft_fail:
     description: 'Do not return an error code if there are failed checks.'
-    required: false
+    required: true
     default: 'false'
   upload_artifact:
     description: 'Upload the scan results as a GitHub artifact'
-    required: false
+    required: true
     default: 'true'
 
 runs:
