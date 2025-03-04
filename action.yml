@@ -77,11 +77,9 @@ runs:
       if: inputs.upload_artifact == 'true'
       uses: actions/upload-artifact@v4
       with:
-        name: scan-results
+        name: scan-results-${{ inputs.commit_sha }}
         path: results.json
         if-no-files-found: ignore
-        retention-days: 7
-        compression-level: 0
 
     - name: Fail pipeline if scan fails
       shell: bash
